@@ -6,5 +6,9 @@ When you use UITableViews and you click a cell:
   - Call didSelectRowAtIndexPath:(NSIndexPath *)indexPath inBackground:(Boolean)background;
   - Reset everything
 
-Using categories from a library with iPhone: http://developer.apple.com/library/mac/#qa/qa2006/qa1490.html
+CREATING a static libray on the iPhone using another Xcode project:
+  - http://www.amateurinmotion.com/articles/2009/02/08/creating-a-static-library-for-iphone.html
+
+Using categories from a library with iPhone: 
+  - http://developer.apple.com/library/mac/#qa/qa2006/qa1490.html
 Use the "Other linker flags" option: -all_load
