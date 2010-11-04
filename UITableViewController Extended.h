@@ -14,12 +14,8 @@
 UIViewController *childController;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath inBackground:(Boolean)background;
-- (void)loadViewControllerInBackground:(NSString *)controllerName;
-- (void)loadViewControllerInBackground:(NSInvocation *)invocation withCell:(UITableViewCell *)cell;
+- (void)pushViewControllerOnMainThread:(UIViewController *)controller animated:(Boolean)animated;
 - (void)performSelectorInBackground:(SEL)aSelector withValues:(void *)context, ... ;
-
-- (UIViewController *)childController;
-- (void)setChildController:(UIViewController *)childController;
 
 //Protected methods
 - (void)showIndicator:(UITableViewCell *)cell;

@@ -10,16 +10,6 @@
 
 @implementation UITableViewController (Extended)
 
-- (UIViewController *)childController
-{
-	return childController;
-}
-
-- (void)setChildController:(UIViewController *)controller
-{
-	childController = controller;
-}
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath inBackground:(Boolean)background {
 	NSLog(@"tableView: didSelectRowAtIndexPath: inBackground:");
 }
@@ -60,6 +50,20 @@
 	[[UIApplication sharedApplication] performSelectorOnMainThread:@selector(setNetworkActivityIndicatorVisible:) withObject:NO waitUntilDone:YES];
 	
 	[pool drain];
+}
+
+- (void)pushViewControllerOnMainThread:(UIViewController *)controller animated:(Boolean)animated {
+	NSLog(@"pushViewControllerOnMainThread");
+	return;
+	
+	NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[self methodSignatureForSelector:@selector(pushViewController:animated:)]];
+	[invocation setTarget:self];
+	[invocation setSelector:@selector(pushViewController:animated:)];
+	[invocation setArgument:&controller atIndex:2];
+	[invocation setArgument:&animated atIndex:3];
+	
+	[invocation performSelectorOnMainThread:@selector(invoke) withObject:nil waitUntilDone:YES];
+	//[invocation invoke];
 }
 
 - (void)resetAccessoryType:(UITableViewCell *)cell withAccessoryType:(NSNumber *)accessoryType
@@ -170,46 +174,6 @@
 		[self performSelectorInBackground:aSelector withObject:nil];
 	}
 }
-
-/*
- * Oude stuff
- */
-
-- (void)loadViewControllerInBackground:(NSString *)controllerName {
-	NSLog(@"loadViewControllerInBackground");
-	NSLog(@"controllerName: %@", controllerName);
-	
-	[self performSelectorInBackground:@selector(loadViewController:) withObject:controllerName];
-}
-
-- (void)loadViewControllerInBackground:(NSInvocation *)invocation withCell:(UITableViewCell *)cell {
-	NSLog(@"loadViewControllerInBackground withCell");
-	
-	[self showIndicator:cell];
-	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-	[self performSelectorInBackground:@selector(loadViewController:withCell:) withValues:invocation, cell];
-}
-
-//- (void)loadViewController:(NSInvocation *)invocation withCell:(UITableViewCell *)cell {
-//	NSLog(@"Hello!");
-//	NSAutoreleasePool * pool;
-//	pool = [[NSAutoreleasePool alloc] init];
-//	
-//	UIViewController *controller;
-//	[invocation invoke];
-//	[invocation getReturnValue:&controller];
-//	
-//	//[self hideIndicator:cell];
-//	[self performSelectorOnMainThread:@selector(hideIndicator:) withObject:cell waitUntilDone:YES];
-//	[self performSelectorOnMainThread:@selector(enableUserInteraction:) withObject:cell waitUntilDone:YES];
-//	
-//	NSLog(@"class: %@", [controller class]);
-//	if (controller != nil) {
-//		self.childController = controller;
-//		[self.navigationController pushViewC‰ontroller:controller animated:YES];
-//	}
-//	[pool drain];
-//}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView
 		 cellForRowAtIndexPath:(NSIndexPath *)indexPath {
